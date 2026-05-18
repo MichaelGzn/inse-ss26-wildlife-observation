@@ -1,0 +1,16 @@
+# Target-Ordner von Java/Maven
+**/target/
+**/build/
+
+# IDE-Einstellungen (IntelliJ, VS Code, etc.)
+**/.idea/
+**/*.iml
+**/.vscode/
+
+# Frontend-Abhängigkeiten
+**/node_modules/
+**/dist/
+
+# Systemdateien
+.DS_Store
+Thumbs.db
