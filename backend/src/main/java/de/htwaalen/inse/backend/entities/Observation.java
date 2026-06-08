@@ -7,24 +7,62 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
 
 @Entity
-@Data
 public class Observation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Eindeutige Nummer für jede gemeldete Sichtung
+    private Long id;
 
-    private LocalDate date; // Das Datum der Sichtung (z.B. 2026-06-08)
-    private LocalTime time; // Die Uhrzeit der Sichtung (z.B. 11:42:00)
+    private LocalDate date;
+    private LocalTime time;
 
-    // Eine Sichtung gehört zu genau einem Tier
     @ManyToOne
     private Animal animal;
 
-    // Eine Sichtung gehört zu genau einem Ort
     @ManyToOne
     private Location location;
+
+    // --- Getter und Setter ---
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
+    }
+
+    public Animal getAnimal() {
+        return animal;
+    }
+
+    public void setAnimal(Animal animal) {
+        this.animal = animal;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 }
