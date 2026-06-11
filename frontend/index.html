@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wildlife Tracker</title>
+    
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background-color: #f4f7f6; 
+            color: #333;
+        }
+        h1 { color: #2c3e50; }
+        
+        .container { 
+            display: flex; 
+            gap: 20px; 
+            margin-top: 20px;
+        }
+        
+        .form-box { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+            width: 30%; 
+        }
+        
+        .map-box { 
+            background: #e9ecef; 
+            border-radius: 10px; 
+            width: 70%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 600px; 
+            border: 3px dashed #adb5bd; 
+        }
+        
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 8px 0 20px 0; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            box-sizing: border-box; 
+        }
+        button { 
+            background-color: #2e8b57; 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            width: 100%; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: bold;
+        }
+        button:hover { background-color: #246b43; }
+
+        /* Neues Design für unsere Tier-Liste */
+        ul { list-style-type: none; padding: 0; }
+        li { background: #f8f9fa; margin: 8px 0; padding: 12px; border-radius: 6px; border-left: 4px solid #2e8b57; font-weight: 500;}
+        .latin { color: #6c757d; font-size: 0.9em; font-style: italic; display: block; margin-top: 4px;}
+    </style>
+</head>
+<body>
+
+    <h1>🌿 Wildtier-Erfassungssystem</h1>
+
+    <div class="container">
+        
+        <div class="form-box">
+            <h3>Neue Tierart anlegen</h3>
+            
+            <label>Name (z.B. Wildschwein)</label>
+            <input type="text" id="designationInput" placeholder="Name eingeben...">
+            
+            <label>Lateinischer Name</label>
+            <input type="text" id="latinInput" placeholder="Lateinischen Namen eingeben...">
+            
+            <button onclick="saveGenus()">Speichern</button>
+
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+            <h3>📋 Gespeicherte Tierarten</h3>
+            <ul id="tierListe">
+                <li style="border-left-color: gray;">Lade Daten vom Server...</li>
+            </ul>
+        </div>
+
+        <div class="map-box">
+            <h2 style="color: #6c757d;">🗺️ Hier laden wir bald die Google Maps Karte</h2>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. Die neue Funktion zum Abholen der Daten (GET)
+        function ladeTiere() {
+            fetch("http://localhost:8080/api/genus")
+            .then(response => response.json())
+            .then(data => {
+                let liste = document.getElementById("tierListe");
+                liste.innerHTML = ""; // Erstmal den "Lade Daten..." Text wegschmeißen
+
+                // Für jedes Tier aus der Datenbank bauen wir einen Eintrag in der Liste
+                data.forEach(tier => {
+                    liste.innerHTML += "<li>" + tier.designation + " <span class='latin'>" + tier.latinDesignation + "</span></li>";
+                });
+            })
+            .catch(error => {
+                document.getElementById("tierListe").innerHTML = "<li style='border-left-color: red;'>Keine Verbindung zum Server!</li>";
+            });
+        }
+
+        // 2. Deine alte Speicher-Funktion
+        function saveGenus() {
+            let designationValue = document.getElementById("designationInput").value;
+            let latinValue = document.getElementById("latinInput").value;
+
+            let genusData = {
+                designation: designationValue,
+                latinDesignation: latinValue
+            };
+
+            fetch("http://localhost:8080/api/genus", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(genusData)
+            })
+            .then(response => {
+                if(response.ok) {
+                    // Felder leeren...
+                    document.getElementById("designationInput").value = "";
+                    document.getElementById("latinInput").value = "";
+                    // ... und direkt die Liste neu laden, damit das neue Tier auftaucht!
+                    ladeTiere(); 
+                } else {
+                    alert("❌ Fehler beim Speichern!");
+                }
+            });
+        }
+
+        // 3. Diese Zeile sagt dem Browser: Sobald die Seite geladen ist, hol die Tiere ab!
+        window.onload = ladeTiere;
+    </script>
+</body>
+</html>

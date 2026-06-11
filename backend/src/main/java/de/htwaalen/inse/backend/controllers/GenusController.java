@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController // Sagt Spring Boot: "Das hier ist ein Empfangsschalter für APIs!"
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/genus") // Die URL, unter der die Tür erreichbar ist
 public class GenusController {
 
