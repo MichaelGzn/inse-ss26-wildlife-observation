@@ -2,6 +2,8 @@ package de.htwaalen.inse.backend.entities;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,13 +20,13 @@ public class Observation {
     private LocalDate date;
     private LocalTime time;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Animal animal;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Location location;
 
-    // --- Getter und Setter ---
+    //Getter und Setter
 
     public Long getId() {
         return id;

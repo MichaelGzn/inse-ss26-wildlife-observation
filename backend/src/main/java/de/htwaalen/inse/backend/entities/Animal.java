@@ -1,5 +1,6 @@
 package de.htwaalen.inse.backend.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,7 +19,7 @@ public class Animal {
     private Integer estimatedAge;
     private String gender;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Genus genus;
 
     // --- Getter und Setter ---
