@@ -5,20 +5,26 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+//Standort wird als Tabelle in der Datenbank gespeichert
 @Entity
 public class Location {
 
+	//Eindeutige Nummer für jeden Standort 
     @Id
+    
+    //Nummer wird automstisch erstellt 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long lnr;
-
+    
+    //Allgemeine Informationen zum Standort 
     private String shorttitle;
     private String description;
     
+    //Geografische Koordinaten des Standorts 
     private Double latitude;
     private Double longitude;
 
-    // --- Getter und Setter ---
+    // Getter und Setter
 
     public Long getLnr() {
         return lnr;

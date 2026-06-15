@@ -10,19 +10,26 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
+//ichtung wird als Tabelle in der Datenbank gespeichert 
 @Entity
 public class Observation {
-
+	
+	//EIndeutige ID für jede Beobachtung 
     @Id
+    
+    //DIe Id wird automatisch erstellt 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //Datum und Uhrzeit der Beobachtung 
     private LocalDate date;
     private LocalTime time;
 
+    //Eine Beobachtung gehört zu einem bestimmten Tier 
     @ManyToOne(cascade = CascadeType.ALL)
     private Animal animal;
 
+    //Eine Beobachtung findet an einem bestimmten Ort statt
     @ManyToOne(cascade = CascadeType.ALL)
     private Location location;
 
