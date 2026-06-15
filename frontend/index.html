@@ -34,12 +34,11 @@
             overflow-y: auto; 
         }
         
-        /* 2. NEU: Angepasstes Design für die Karte */
         .map-box { 
             border-radius: 10px; 
             width: 65%; 
             border: 2px solid #adb5bd; 
-            z-index: 1; /* Verhindert, dass die Karte über andere Elemente lappt */
+            z-index: 1; 
         }
 
         h3 { margin-top: 0; color: #2e8b57; border-bottom: 2px solid #eee; padding-bottom: 10px;}
@@ -72,6 +71,15 @@
             margin-top: 10px;
         }
         button:hover { background-color: #246b43; }
+
+        #gpsButton {
+            background-color: #007bff;
+            margin-bottom: 15px;
+            margin-top: 0;
+        }
+        #gpsButton:hover {
+            background-color: #0056b3;
+        }
 
         ul { list-style-type: none; padding: 0; }
         li { background: #f8f9fa; margin: 8px 0; padding: 12px; border-radius: 6px; border-left: 4px solid #2e8b57; font-size: 0.9em;}
@@ -131,13 +139,15 @@
             <div class="row">
                 <div>
                     <label>Breitengrad (Latitude)</label>
-                    <input type="number" step="0.000001" id="locLat" placeholder="48.837">
+                    <input type="number" step="0.000001" id="locLat" placeholder="48.837" readonly>
                 </div>
                 <div>
                     <label>Längengrad (Longitude)</label>
-                    <input type="number" step="0.000001" id="locLng" placeholder="10.093">
+                    <input type="number" step="0.000001" id="locLng" placeholder="10.093" readonly>
                 </div>
             </div>
+            
+            <button type="button" id="gpsButton" onclick="getLocation()">📍 Mein Standort</button>
 
             <h4>3. Datum & Uhrzeit</h4>
             <div class="row">
@@ -165,24 +175,21 @@
     </div>
 
     <script>
-        let myMap;         // Globale Variable für unsere Karte
-        let markerGroup;   // Eine Gruppe für unsere Pins, damit wir sie leicht löschen können
+        let myMap;
+        let markerGroup;
 
         window.onload = function() {
             let now = new Date();
             document.getElementById('obsDate').value = now.toISOString().split('T')[0];
             document.getElementById('obsTime').value = now.toTimeString().substring(0,5);
             
-            initMap();         // Karte aufbauen
-            ladeSichtungen();  // Daten vom Server holen
+            initMap();
+            ladeSichtungen();
         };
 
-        // 4. NEU: Die Funktion, die unsere OpenStreetMap aufbaut
         function initMap() {
-            // Zentriert die Karte direkt auf die Koordinaten eurer Testdaten (48.837, 10.093)
             myMap = L.map('map').setView([48.837, 10.093], 13);
 
-            // Die Kacheln von OpenStreetMap laden
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -206,7 +213,6 @@
                     let lat = obs.location.latitude;
                     let lng = obs.location.longitude;
                     
-                    // NEU: Hier ist der rote Löschen-Button dazugekommen!
                     liste.innerHTML += "<li><strong>" + tier + "</strong> gesehen bei " + ort + 
                                        "<span class='details'>Am " + datum + " | " + obs.animal.estimatedWeight + "kg</span>" +
                                        "<button style='background-color: #dc3545; padding: 5px; margin-top: 8px; width: auto;' onclick='deleteObservation(" + obs.id + ")'>🗑️ Löschen</button></li>";
@@ -223,7 +229,6 @@
         }
 
         function saveObservation() {
-            // 1. NEU: Wir lesen die Koordinaten direkt am Anfang aus und merken sie uns
             let targetLat = parseFloat(document.getElementById("locLat").value);
             let targetLng = parseFloat(document.getElementById("locLng").value);
 
@@ -241,8 +246,8 @@
                 location: {
                     shorttitle: document.getElementById("locTitle").value,
                     description: document.getElementById("locDesc").value,
-                    latitude: targetLat,  // Hier nutzen wir unsere gemerkte Variable
-                    longitude: targetLng  // Hier nutzen wir unsere gemerkte Variable
+                    latitude: targetLat,
+                    longitude: targetLng
                 },
                 date: document.getElementById("obsDate").value,
                 time: document.getElementById("obsTime").value + ":00" 
@@ -257,13 +262,10 @@
                 if(response.ok) {
                     ladeSichtungen(); 
                     
-                    // Der Kameraflug
-                    // Wenn Koordinaten eingegeben wurden, fliege dorthin
                     if(targetLat && targetLng) {
-                        // myMap.flyTo([Lat, Lng], Zoom-Level, Optionen)
                         myMap.flyTo([targetLat, targetLng], 15, {
                             animate: true,
-                            duration: 1.5 // Der Flug dauert 1,5 Sekunden
+                            duration: 1.5
                         });
                     }
 
@@ -273,7 +275,8 @@
                 }
             });
         }
-function deleteObservation(id) {
+
+        function deleteObservation(id) {
             if(!confirm("Möchtest du diese Sichtung wirklich löschen?")) return;
 
             fetch("http://localhost:8080/api/observation/" + id, {
@@ -281,16 +284,45 @@ function deleteObservation(id) {
             })
             .then(response => {
                 if(response.ok) {
-                    ladeSichtungen(); // Aktualisiert Liste und Karte
+                    ladeSichtungen();
                 } else {
                     alert("❌ Server-Fehler beim Löschen! (Status: " + response.status + ")");
                 }
             })
             .catch(error => {
-                // HIER fangen wir Netzwerk- und CORS-Fehler ab
-                console.error("Lösch-Fehler:", error);
+                console.error(error);
                 alert("❌ Netzwerkfehler! Die Lösch-Anfrage wurde komplett blockiert.");
             });
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                alert("Geolocation wird von diesem Browser leider nicht unterstützt.");
+            }
+        }
+
+        function showPosition(position) {
+            document.getElementById("locLat").value = position.coords.latitude;
+            document.getElementById("locLng").value = position.coords.longitude;
+        }
+
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("Du hast die Standortabfrage abgelehnt. Bitte erlaube den Zugriff im Browser.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Standortinformationen sind aktuell nicht verfügbar.");
+                    break;
+                case error.TIMEOUT:
+                    alert("Die Anfrage für den Standort hat zu lange gedauert (Timeout).");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("Ein unbekannter Fehler ist bei der GPS-Abfrage aufgetreten.");
+                    break;
+            }
         }
     </script>
 </body>
