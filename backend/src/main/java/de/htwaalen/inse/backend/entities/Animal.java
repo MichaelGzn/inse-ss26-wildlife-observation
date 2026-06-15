@@ -10,7 +10,10 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Animal {
 
+	//Eindeutige ID für jedes Tier
     @Id
+    
+    //Dass ID automatisch vergeben wird 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -19,10 +22,11 @@ public class Animal {
     private Integer estimatedAge;
     private String gender;
 
+    //Mehrere Tiere können der selben Gattung zugeordnet werden 
     @ManyToOne(cascade = CascadeType.ALL)
     private Genus genus;
 
-    // --- Getter und Setter ---
+    //  Getter und Setter
 
     public Long getId() {
         return id;
@@ -67,7 +71,8 @@ public class Animal {
     public Genus getGenus() {
         return genus;
     }
-
+    
+    //Verknüpft Tier mit einer Gattung 
     public void setGenus(Genus genus) {
         this.genus = genus;
     }
