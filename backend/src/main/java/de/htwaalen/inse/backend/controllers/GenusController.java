@@ -2,26 +2,29 @@ package de.htwaalen.inse.backend.controllers;
 
 import de.htwaalen.inse.backend.entities.Genus;
 import de.htwaalen.inse.backend.repositories.GenusRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController // Sagt Spring Boot: "Das hier ist ein Empfangsschalter für APIs!"
+@RestController // Spring Boot: "ein Empfangsschalter für APIs"
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/genus") // Die URL, unter der die Tür erreichbar ist
+@RequestMapping("/api/genus") // Ein URL welches unter der Tür erreichbar
 public class GenusController {
 
-    @Autowired // Holt sich den Lagerarbeiter
-    private GenusRepository repository;
+    private final GenusRepository repository;
 
-    // POST: Nimmt Daten von Postman und speichert sie
+    // Der Lagerarbeiter wird hier geholt
+    public GenusController(GenusRepository repository) {
+        this.repository = repository;
+    }
+
+    // POST: Die Daten werden vom Postman erlangt und gespeichert
     @PostMapping
     public Genus createGenus(@RequestBody Genus genus) {
         return repository.save(genus);
     }
 
-    // GET: Holt alle gespeicherten Gattungen aus der Datenbank
+    // GET: alle gespeicherten Gattungen aus der Datenbank werden geholtS
     @GetMapping
     public List<Genus> getAllGenera() {
         return repository.findAll();

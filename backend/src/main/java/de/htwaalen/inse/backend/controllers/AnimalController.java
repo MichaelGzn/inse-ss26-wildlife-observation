@@ -1,27 +1,36 @@
 package de.htwaalen.inse.backend.controllers;
 
-import de.htwaalen.inse.backend.entities.Animal;
-import de.htwaalen.inse.backend.repositories.AnimalRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import de.htwaalen.inse.backend.entities.Animal;
+import de.htwaalen.inse.backend.repositories.AnimalRepository;
+//Erstelle eine Klasse AnimalController
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/animal")
 public class AnimalController {
 
-    @Autowired
-    private AnimalRepository repository;
+ private final AnimalRepository repository;
 
-    @PostMapping
-    public Animal createAnimal(@RequestBody Animal animal) {
-        return repository.save(animal);
-    }
+ // Erstelle einen Konstruktor (ohne @Autowired, da es automatisch passiert!)
+ public AnimalController(AnimalRepository repository) {
+     this.repository = repository;
+ }
 
-    @GetMapping
-    public List<Animal> getAllAnimals() {
-        return repository.findAll();
-    }
+ @PostMapping
+ public Animal createAnimal(@RequestBody Animal animal) {
+     return repository.save(animal);
+ }
+
+ @GetMapping
+ public List<Animal> getAllAnimals() {
+     return repository.findAll();
+ }
 }
