@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.htwaalen.inse.backend.entities.Observation;
 import de.htwaalen.inse.backend.repositories.ObservationRepository;
-
+// ObservationRepsitory Klasse wurde hier erstelltS
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE})
 @RestController
 @RequestMapping("/api/observation")

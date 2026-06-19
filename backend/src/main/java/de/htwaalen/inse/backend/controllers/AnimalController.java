@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+// Klasse erstellen zu AnimalController
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/animal")
 public class AnimalController {
-
+S
     @Autowired
     private AnimalRepository repository;
 

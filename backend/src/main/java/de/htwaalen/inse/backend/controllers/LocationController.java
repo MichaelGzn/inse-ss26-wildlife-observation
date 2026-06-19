@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+// KLasse für LoScationController wird erstellt
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/location")
