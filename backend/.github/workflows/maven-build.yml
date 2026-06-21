@@ -18,4 +18,4 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build and Checkstyle with Maven
-      run: mvn -B package checkstyle:check
+      run: cd backend && mvn -B package checkstyle:check
