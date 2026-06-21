@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+          "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+          "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+<module name="Checker">
+
+	<module name="FileTabCharacter">
+		<property name="severity" value="error" />
+	</module>
+
+	<module name="TreeWalker">
+		<module name="LocalVariableName">
+			<property name="severity" value="error" />
+		</module>
+
+		<module name="MissingJavadocMethod">
+			<property name="severity" value="warning" />
+		</module>
+		<module name="MissingJavadocType">
+			<property name="severity" value="warning" />
+		</module>
+		<module name="JavadocVariable">
+			<property name="severity" value="warning" />
+		</module>
+
+		<module name="DesignForExtension">
+			<property name="severity" value="ignore" />
+		</module>
+		<module name="FinalParameters">
+			<property name="severity" value="ignore" />
+		</module>
+		<module name="HiddenField">
+			<property name="severity" value="ignore" />
+		</module>
+	</module>
+</module>

@@ -8,8 +8,7 @@ import jakarta.persistence.Id;
 //Standort wird als Tabelle in der Datenbank gespeichert
 @Entity
 public class Location {
-
-	//Eindeutige Nummer für jeden Standort 
+//Eindeutige Nummer für jeden Standort 
     @Id
     
     //Nummer wird automstisch erstellt 

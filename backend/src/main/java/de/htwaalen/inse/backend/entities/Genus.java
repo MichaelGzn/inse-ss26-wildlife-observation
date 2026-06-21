@@ -9,41 +9,41 @@ import jakarta.persistence.Id;
 @Entity
 public class Genus {
 
-    //EIndeutige ID für jede Gattung 
-	@Id
-	//Die ID wird automatisch erstellt 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-	
-	//Name der Gattung 
-    private String designation;
-    
-    // Wissenschaftlicher (Lateinischer) Name der Gattung 
-    private String latinDesignation;
+  // EIndeutige ID für jede Gattung
+  @Id
+  // Die ID wird automatisch erstellt
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    //Getter und Setter
+  // Name der Gattung
+  private String designation;
 
-    public Long getId() {
-        return id;
-    }
+  // Wissenschaftlicher (Lateinischer) Name der Gattung
+  private String latinDesignation;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  // Getter und Setter
 
-    public String getDesignation() {
-        return designation;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setDesignation(String designation) {
-        this.designation = designation;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getLatinDesignation() {
-        return latinDesignation;
-    }
+  public String getDesignation() {
+    return designation;
+  }
 
-    public void setLatinDesignation(String latinDesignation) {
-        this.latinDesignation = latinDesignation;
-    }
+  public void setDesignation(String designation) {
+    this.designation = designation;
+  }
+
+  public String getLatinDesignation() {
+    return latinDesignation;
+  }
+
+  public void setLatinDesignation(String latinDesignation) {
+    this.latinDesignation = latinDesignation;
+  }
 }
