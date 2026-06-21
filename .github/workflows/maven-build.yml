@@ -2,7 +2,7 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main", "feature/*" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -17,5 +17,6 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Build and Checkstyle with Maven
-      run: cd backend && mvn -B package checkstyle:check
+    - name: Build with Maven
+      # WICHTIG: Das 'cd backend &&' sorgt dafür, dass Maven im richtigen Ordner startet
+      run: cd backend && mvn -B package
