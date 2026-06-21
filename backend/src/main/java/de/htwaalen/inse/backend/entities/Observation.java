@@ -13,65 +13,65 @@ import jakarta.persistence.ManyToOne;
 //ichtung wird als Tabelle in der Datenbank gespeichert 
 @Entity
 public class Observation {
-	
-	//EIndeutige ID für jede Beobachtung 
-    @Id
-    
-    //DIe Id wird automatisch erstellt 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    //Datum und Uhrzeit der Beobachtung 
-    private LocalDate date;
-    private LocalTime time;
+  // EIndeutige ID für jede Beobachtung
+  @Id
 
-    //Eine Beobachtung gehört zu einem bestimmten Tier 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Animal animal;
+  // DIe Id wird automatisch erstellt
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    //Eine Beobachtung findet an einem bestimmten Ort statt
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Location location;
+  // Datum und Uhrzeit der Beobachtung
+  private LocalDate date;
+  private LocalTime time;
 
-    //Getter und Setter
+  // Eine Beobachtung gehört zu einem bestimmten Tier
+  @ManyToOne(cascade = CascadeType.ALL)
+  private Animal animal;
 
-    public Long getId() {
-        return id;
-    }
+  // Eine Beobachtung findet an einem bestimmten Ort statt
+  @ManyToOne(cascade = CascadeType.ALL)
+  private Location location;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  // Getter und Setter
 
-    public LocalDate getDate() {
-        return date;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public LocalTime getTime() {
-        return time;
-    }
+  public LocalDate getDate() {
+    return date;
+  }
 
-    public void setTime(LocalTime time) {
-        this.time = time;
-    }
+  public void setDate(LocalDate date) {
+    this.date = date;
+  }
 
-    public Animal getAnimal() {
-        return animal;
-    }
+  public LocalTime getTime() {
+    return time;
+  }
 
-    public void setAnimal(Animal animal) {
-        this.animal = animal;
-    }
+  public void setTime(LocalTime time) {
+    this.time = time;
+  }
 
-    public Location getLocation() {
-        return location;
-    }
+  public Animal getAnimal() {
+    return animal;
+  }
 
-    public void setLocation(Location location) {
-        this.location = location;
-    }
+  public void setAnimal(Animal animal) {
+    this.animal = animal;
+  }
+
+  public Location getLocation() {
+    return location;
+  }
+
+  public void setLocation(Location location) {
+    this.location = location;
+  }
 }

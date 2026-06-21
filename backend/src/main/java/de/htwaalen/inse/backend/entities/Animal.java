@@ -10,7 +10,7 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Animal {
 
-	//Eindeutige ID für jedes Tier
+  //Eindeutige ID für jedes Tier
     @Id
     
     //Dass ID automatisch vergeben wird 
