@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wildlife Tracker</title>
-    
+
+    <!-- Leaflet einbinden: damit bauen wir die Karte  -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous" />
 	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
 
     <style>
+        /* Grundlayout der Seite */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             margin: 0; 
@@ -17,14 +19,16 @@
             color: #333;
         }
         h1 { color: #2c3e50; }
-        
+
+        /* Container teilt die Seite in Formular (links) und Karte (rechts) */
         .container { 
             display: flex; 
             gap: 20px; 
             margin-top: 20px;
             height: 85vh; 
         }
-        
+
+        /* Box mit dem Eingabeformular (linke Seite) */
         .form-box { 
             background: white; 
             padding: 25px; 
@@ -33,7 +37,8 @@
             width: 35%; 
             overflow-y: auto; 
         }
-        
+
+        /* Box für die Karte (rechte Seite) */
         .map-box { 
             border-radius: 10px; 
             width: 65%; 
@@ -43,12 +48,13 @@
 
         h3 { margin-top: 0; color: #2e8b57; border-bottom: 2px solid #eee; padding-bottom: 10px;}
         h4 { margin-bottom: 5px; color: #495057; }
-        
+
+        /* Zwei Felder nebeneinander in einer Reihe */
         .row { display: flex; gap: 10px; }
         .row > div { flex: 1; }
 
         label { font-size: 0.85em; font-weight: bold; color: #6c757d; }
-        
+
         input, select { 
             width: 100%; 
             padding: 10px; 
@@ -72,6 +78,7 @@
         }
         button:hover { background-color: #246b43; }
 
+        /* eigener Style für den GPS-Button (blau statt grün) */
         #gpsButton {
             background-color: #007bff;
             margin-bottom: 15px;
@@ -91,10 +98,12 @@
     <h1>🌿 Wildtier-Erfassungssystem</h1>
 
     <div class="container">
-        
+
+        <!-- Linke Seite: Formular zum Melden einer neuen Sichtung -->
         <div class="form-box">
             <h3>🐾 Neue Sichtung melden</h3>
-            
+
+            <!-- Block 1: Angaben zum Tier -->
             <h4>1. Tierart & Daten</h4>
             <div class="row">
                 <div>
@@ -131,6 +140,7 @@
                 </div>
             </div>
 
+            <!-- Block 2: Ort der Sichtung.  -->
             <h4>2. Ort der Sichtung</h4>
             <label for="locTitle">Ortsname / Titel</label>
             <input type="text" id="locTitle" placeholder="z.B. Hochsitz Nord">
@@ -146,9 +156,10 @@
                     <input type="number" step="0.000001" id="locLng" placeholder="10.093" readonly>
                 </div>
             </div>
-            
+
             <button type="button" id="gpsButton" onclick="getLocation()">📍 Mein Standort</button>
 
+            <!-- Block 3: Zeitpunkt der Sichtung (wird beim Laden automatisch auf jetzt gesetzt) -->
             <h4>3. Datum & Uhrzeit</h4>
             <div class="row">
                 <div>
@@ -160,63 +171,77 @@
                     <input type="time" id="obsTime">
                 </div>
             </div>
-            
+
             <button onclick="saveObservation()">Sichtung speichern</button>
 
             <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+
+            <!-- Liste der letzten Sichtungen, wird per JavaScript befüllt -->
             <h3>📋 Letzte Sichtungen</h3>
             <ul id="sichtungsListe">
                 <li style="border-left-color: gray;">Lade Daten vom Server...</li>
             </ul>
         </div>
 
+        <!-- Rechte Seite: hier wird die Karte eingehängt -->
         <div class="map-box" id="map"></div>
 
     </div>
 
     <script>
+        // globale Variablen für die Karte und die Marker-Gruppe
         let myMap;
         let markerGroup;
 
+        // wird ausgeführt, sobald die Seite fertig geladen ist
         window.onload = function() {
+            // Datum und Uhrzeit automatisch auf "jetzt" setzen
             let now = new Date();
             document.getElementById('obsDate').value = now.toISOString().split('T')[0];
             document.getElementById('obsTime').value = now.toTimeString().substring(0,5);
-            
-            initMap();
-            ladeSichtungen();
+
+            initMap();        // Karte aufbauen
+            ladeSichtungen(); // vorhandene Sichtungen laden
         };
 
+        // baut die Leaflet-Karte auf
         function initMap() {
+            // Startposition (Region Aalen) und Zoomstufe
             myMap = L.map('map').setView([48.837, 10.093], 13);
 
+            // Kartenkacheln von OpenStreetMap laden
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(myMap);
 
+            // eigene Gruppe für die Marker, damit wir sie später leicht wieder leeren können
             markerGroup = L.layerGroup().addTo(myMap);
         }
 
+        // holt alle Sichtungen vom Backend und zeigt sie in Liste + Karte
         function ladeSichtungen() {
-            fetch("http://localhost:8080/api/observation")
+            fetch("http://localhost:8080/api/observation") // GET-Anfrage ans Backend
             .then(response => response.json())
             .then(data => {
                 let liste = document.getElementById("sichtungsListe");
-                liste.innerHTML = ""; 
-                markerGroup.clearLayers(); 
+                liste.innerHTML = "";      // alte Liste leeren
+                markerGroup.clearLayers(); // alte Marker von der Karte entfernen
 
+                // für jede Sichtung einen Listeneintrag und einen Marker erzeugen
                 data.forEach(obs => {
                     let tier = obs.animal.genus.designation;
                     let ort = obs.location.shorttitle;
                     let datum = obs.date;
                     let lat = obs.location.latitude;
                     let lng = obs.location.longitude;
-                    
+
+                    // Eintrag inkl. Löschen-Button in die Liste schreiben
                     liste.innerHTML += "<li><strong>" + tier + "</strong> gesehen bei " + ort + 
                                        "<span class='details'>Am " + datum + " | " + obs.animal.estimatedWeight + "kg</span>" +
                                        "<button style='background-color: #dc3545; padding: 5px; margin-top: 8px; width: auto;' onclick='deleteObservation(" + obs.id + ")'>🗑️ Löschen</button></li>";
 
+                    // nur wenn Koordinaten vorhanden sind, Marker auf die Karte setzen
                     if(lat && lng) {
                         let popupText = "<b>" + tier + "</b><br>" + ort + "<br>" + datum;
                         L.marker([lat, lng]).addTo(markerGroup).bindPopup(popupText);
@@ -224,14 +249,17 @@
                 });
             })
             .catch(error => {
+                // läuft hier rein, wenn der Server nicht erreichbar ist
                 document.getElementById("sichtungsListe").innerHTML = "<li style='border-left-color: red;'>Keine Verbindung zum Server!</li>";
             });
         }
 
+        // liest die Formular-Eingaben aus und schickt sie als neue Sichtung ans Backend
         function saveObservation() {
             let targetLat = parseFloat(document.getElementById("locLat").value);
             let targetLng = parseFloat(document.getElementById("locLng").value);
 
+            // alle Eingaben zu einem JSON-Objekt zusammenbauen (Aufbau passt zum Backend-Modell)
             let observationData = {
                 animal: {
                     estimatedWeight: parseFloat(document.getElementById("animalWeight").value),
@@ -250,9 +278,10 @@
                     longitude: targetLng
                 },
                 date: document.getElementById("obsDate").value,
-                time: document.getElementById("obsTime").value + ":00" 
+                time: document.getElementById("obsTime").value + ":00" // :00 anhängen, weil das Backend die Sekunden erwartet
             };
 
+            // POST-Anfrage: neue Sichtung ans Backend schicken
             fetch("http://localhost:8080/api/observation", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -260,8 +289,9 @@
             })
             .then(response => {
                 if(response.ok) {
-                    ladeSichtungen(); 
-                    
+                    ladeSichtungen(); // Liste/Karte neu laden, damit die neue Sichtung erscheint
+
+                    // sanft zur gespeicherten Position auf der Karte fliegen
                     if(targetLat && targetLng) {
                         myMap.flyTo([targetLat, targetLng], 15, {
                             animate: true,
@@ -276,15 +306,17 @@
             });
         }
 
+        // löscht eine Sichtung anhand ihrer ID
         function deleteObservation(id) {
-            if(!confirm("Möchtest du diese Sichtung wirklich löschen?")) return;
+            if(!confirm("Möchtest du diese Sichtung wirklich löschen?")) return; // Sicherheitsabfrage
 
+            // DELETE-Anfrage ans Backend
             fetch("http://localhost:8080/api/observation/" + id, {
                 method: "DELETE"
             })
             .then(response => {
                 if(response.ok) {
-                    ladeSichtungen();
+                    ladeSichtungen(); // Liste neu laden
                 } else {
                     alert("❌ Server-Fehler beim Löschen! (Status: " + response.status + ")");
                 }
@@ -295,6 +327,7 @@
             });
         }
 
+        // fragt den aktuellen Standort über das Browser-GPS ab
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -303,11 +336,13 @@
             }
         }
 
+        // schreibt die ermittelten GPS-Koordinaten in die Formularfelder
         function showPosition(position) {
             document.getElementById("locLat").value = position.coords.latitude;
             document.getElementById("locLng").value = position.coords.longitude;
         }
 
+        // Fehlerbehandlung, falls die GPS-Abfrage nicht klappt
         function showError(error) {
             switch(error.code) {
                 case error.PERMISSION_DENIED:

@@ -1,0 +1,4 @@
+language: java
+
+script:
+  - cd backend && mvn clean install -DskipTests
