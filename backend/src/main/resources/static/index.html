@@ -98,31 +98,31 @@
             <h4>1. Tierart & Daten</h4>
             <div class="row">
                 <div>
-                    <label>Tierart</label>
+                    <label for="genusName">Tierart</label>
                     <input type="text" id="genusName" placeholder="z.B. Wildschwein">
                 </div>
                 <div>
-                    <label>Lateinisch</label>
+                    <label for="genusLatin">Lateinisch</label>
                     <input type="text" id="genusLatin" placeholder="z.B. Sus scrofa">
                 </div>
             </div>
             <div class="row">
                 <div>
-                    <label>Gewicht (kg)</label>
+                    <label for="animalWeight">Gewicht (kg)</label>
                     <input type="number" step="0.1" id="animalWeight" placeholder="85.5">
                 </div>
                 <div>
-                    <label>Größe (cm)</label>
+                    <label for="animalSize">Größe (cm)</label>
                     <input type="number" step="0.1" id="animalSize" placeholder="120.0">
                 </div>
             </div>
             <div class="row">
                 <div>
-                    <label>Alter (Jahre)</label>
+                    <label for="animalAge">Alter (Jahre)</label>
                     <input type="number" id="animalAge" placeholder="4">
                 </div>
                 <div>
-                    <label>Geschlecht</label>
+                    <label for="animalGender">Geschlecht</label>
                     <select id="animalGender">
                         <option value="Männlich">Männlich</option>
                         <option value="Weiblich">Weiblich</option>
@@ -132,17 +132,17 @@
             </div>
 
             <h4>2. Ort der Sichtung</h4>
-            <label>Ortsname / Titel</label>
+            <label for="locTitle">Ortsname / Titel</label>
             <input type="text" id="locTitle" placeholder="z.B. Hochsitz Nord">
-            <label>Genaue Beschreibung</label>
+            <label for="locDesc">Genaue Beschreibung</label>
             <input type="text" id="locDesc" placeholder="z.B. Am Waldrand Nähe alte Eiche">
             <div class="row">
                 <div>
-                    <label>Breitengrad (Latitude)</label>
+                    <label for="locLat">Breitengrad (Latitude)</label>
                     <input type="number" step="0.000001" id="locLat" placeholder="48.837" readonly>
                 </div>
                 <div>
-                    <label>Längengrad (Longitude)</label>
+                    <label for="locLng">Längengrad (Longitude)</label>
                     <input type="number" step="0.000001" id="locLng" placeholder="10.093" readonly>
                 </div>
             </div>
@@ -152,11 +152,11 @@
             <h4>3. Datum & Uhrzeit</h4>
             <div class="row">
                 <div>
-                    <label>Datum</label>
+                    <label for="obsDate">Datum</label>
                     <input type="date" id="obsDate">
                 </div>
                 <div>
-                    <label>Uhrzeit</label>
+                    <label for="obsTime">Uhrzeit</label>
                     <input type="time" id="obsTime">
                 </div>
             </div>
