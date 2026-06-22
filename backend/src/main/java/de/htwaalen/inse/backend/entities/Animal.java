@@ -52,7 +52,7 @@ public class Animal {
         this.estimatedSize = estimatedSize;
     }
 
-    public Integer getEstimatedAge() {
+    	public Integer getEstimatedAge() {
         return estimatedAge;
     }
 
