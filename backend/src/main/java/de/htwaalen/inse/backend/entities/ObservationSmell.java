@@ -15,12 +15,11 @@ public class ObservationSmell {
      */
     
     
-//    
-//    public void updateObservationDetails(String name, String latin, double weight, double size, 
-//                                          int age, String gender, String locTitle, String locDesc, 
-//                                          double lat, double lng, String date, String time) {
-//    }
-//    
+    public void updateObservationDetails(String name, String latin, double weight, double size, 
+                                          int age, String gender, String locTitle, String locDesc, 
+                                          double lat, double lng, String date, String time) {
+    }
+    
 
     
     public Long getId() {
