@@ -20,7 +20,7 @@ public class AnimalController {
  private final AnimalRepository repository;
 
  // Erstelle einen Konstruktor (ohne @Autowired, da es automatisch passiert!)
- public AnimalController(AnimalRepository repository) {
+     public AnimalController(AnimalRepository repository) {
      this.repository = repository;
  }
 

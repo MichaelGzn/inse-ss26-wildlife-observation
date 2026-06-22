@@ -256,15 +256,15 @@
 
         // liest die Formular-Eingaben aus und schickt sie als neue Sichtung ans Backend
         function saveObservation() {
-            let targetLat = parseFloat(document.getElementById("locLat").value);
-            let targetLng = parseFloat(document.getElementById("locLng").value);
+            let targetLat = Number.parseFloat(document.getElementById("locLat").value);
+            let targetLng = Number.parseFloat(document.getElementById("locLng").value);
 
             // alle Eingaben zu einem JSON-Objekt zusammenbauen (Aufbau passt zum Backend-Modell)
             let observationData = {
                 animal: {
-                    estimatedWeight: parseFloat(document.getElementById("animalWeight").value),
-                    estimatedSize: parseFloat(document.getElementById("animalSize").value),
-                    estimatedAge: parseInt(document.getElementById("animalAge").value),
+                    estimatedWeight: Number.parseFloat(document.getElementById("animalWeight").value),
+                    estimatedSize: Number.parseFloat(document.getElementById("animalSize").value),
+                    estimatedAge: Number.parseInt(document.getElementById("animalAge").value),
                     gender: document.getElementById("animalGender").value,
                     genus: {
                         designation: document.getElementById("genusName").value,
