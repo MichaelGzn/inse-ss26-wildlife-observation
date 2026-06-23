@@ -262,9 +262,8 @@
             // alle Eingaben zu einem JSON-Objekt zusammenbauen (Aufbau passt zum Backend-Modell)
             let observationData = {
                 animal: {
-                    estimatedWeight: parseFloat(document.getElementById("animalWeight").value),
-                    estimatedSize: parseFloat(document.getElementById("animalSize").value),
-                    estimatedAge: parseInt(document.getElementById("animalAge").value),
+                    estimatedWeight: Number.parseFloat(document.getElementById("animalSize").value),
+                    estimatedAge: Number.parseInt(document.getElementById("animalAge").value),
                     gender: document.getElementById("animalGender").value,
                     genus: {
                         designation: document.getElementById("genusName").value,
