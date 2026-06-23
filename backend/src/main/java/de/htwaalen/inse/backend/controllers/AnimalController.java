@@ -31,6 +31,6 @@ public class AnimalController {
 
  @GetMapping
  public List<Animal> getAllAnimals() {
-     return repository.findAll();
+	 return repository.findAll();
  }
 }
